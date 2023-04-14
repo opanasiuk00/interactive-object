@@ -23,32 +23,21 @@ export const App = () => {
 	const handleMouseUp = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>) => {
 		setIsDragging(false);
 	};
-
 	React.useEffect(() => {
-		const moveHandler = (e: PointerEvent) => {
+		const handleMove = (event: PointerEvent | TouchEvent) => {
 			if (isDragging) {
-				const newPosition = {
-					x: e.pageX,
-					y: e.pageY,
-				};
-				setCurrentPosition(newPosition);
+				setCurrentPosition({
+					x: event instanceof PointerEvent ? event.pageX : event.touches[0].pageX,
+					y: event instanceof PointerEvent ? event.pageY : event.touches[0].pageY,
+				});
 			}
-		}
-		const touchHandler = (e: TouchEvent) => {
-			if (isDragging) {
-				const newPosition = {
-					x: e.touches[0].pageX,
-					y: e.touches[0].pageY,
-				};
-				setCurrentPosition(newPosition);
-			}
-		}
+		};
 
-		document.addEventListener('pointermove', moveHandler);
-		document.addEventListener('touchmove', touchHandler);
+		document.addEventListener('pointermove', handleMove);
+		document.addEventListener('touchmove', handleMove);
 		return () => {
-			document.removeEventListener('pointermove', moveHandler);
-			document.removeEventListener('touchmove', touchHandler);
+			document.removeEventListener('pointermove', handleMove);
+			document.removeEventListener('touchmove', handleMove);
 		}
 	}, [isDragging])
 
