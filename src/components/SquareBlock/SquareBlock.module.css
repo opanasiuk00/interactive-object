@@ -1,0 +1,11 @@
+.square {
+    width: 100px;
+    height: 100px;
+    background: var(--black);
+    position: absolute;
+    border: 2px solid var(--black);
+}
+
+.active {
+    border-color: var(--red);
+}

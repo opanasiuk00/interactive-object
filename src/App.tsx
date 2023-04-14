@@ -1,26 +1,52 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.css';
+import { SquareBlock } from './components/SquareBlock/SquareBlock';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export type CurrentPositionType = {
+	x: number,
+	y: number
 }
 
-export default App;
+const initialPostion = {
+	x: 50,
+	y: 50,
+}
+
+export const App = () => {
+	const [isDragging, setIsDragging] = React.useState<boolean>(false);
+	const [currentPosition, setCurrentPosition] = React.useState<CurrentPositionType>(initialPostion);
+
+	const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		setIsDragging(true);
+	};
+
+	const handleMouseUp = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		setIsDragging(false);
+	};
+
+	React.useEffect(() => {
+		const moveHandler = (e: { pageX: number; pageY: number; }) => {
+			if (isDragging) {
+				const newPosition = {
+					x: e.pageX,
+					y: e.pageY,
+				};
+				setCurrentPosition(newPosition);
+			}
+		}
+
+		document.addEventListener('pointermove', moveHandler);
+		return () => {
+			document.removeEventListener('pointermove', moveHandler);
+		}
+	}, [isDragging])
+
+	return (
+		<div className={styles.wrapper} onMouseUp={handleMouseUp} >
+			<SquareBlock {...currentPosition}
+				onMouseDown={handleMouseDown}
+				isDragging={isDragging}
+			/>
+		</div>
+	);
+};
