@@ -19,7 +19,7 @@ export const App = () => {
 	const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>) => {
 		setIsDragging(true);
 	};
-	console.log(currentPosition)
+
 	const handleMouseUp = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>) => {
 		setIsDragging(false);
 	};
